@@ -1,250 +1,221 @@
 Deep Learning based Contactless Biometric
-Recognition using Bracelet Lines
-Ritwik Duggal, Aarya Pandya and Nitin Gupta, IEEE Senior Member ∗
+Recognition of Bracelet Lines
+Nitin Gupta, Ritwik Duggal, Aarya Pandya∗
 ∗Department of Computer Science and Engineering, National Institute of Technology, Hamirpur, Himachal Pradesh, India
-Emails: ritwikduggal@ieee.org, aaasp16@ieee.org, nitin3041@gmail.com
-Abstract—Many industries, including personal identity, cell
-phones, and smart gadgets, depend heavily on biometric identification. Numerous techniques, including finger knuckle and face
-recognition as well as fingerprint analysis, have been used over
-time. Contactless biometrics have become growing in significance
-as a result of the current COVID-19 epidemic, which has sparked
-the creation of systems that are both more effective and efficient.
-This study suggests a unique method for biometric identification
-that makes use of wrist bracelet lines. The system utilizes
-deep learning methods for identification along with the YOLO
-(You Only Look Once) model for wrist detection. In order to
-capture and transmit user images to a server for identification,
-an Arduino Uno and an Esp32 CAM module are employed.
-The suggested system’s real-time recognition capabilities are
-illustrated by the simulation results.
+Emails: nitin3041@gmail.com, ritwikduggal@ieee.org, aaasp16@ieee.org
+Abstract—Biometrics has always been an essential component
+for the identification of personnel in every sector, even devices
+such as smartphones, and smart devices use it these days.
+Numerous methods have been implemented for it over the
+years, such as biometrics using fingerprint recognition, facial
+recognition and in many recent works even using the finger
+knuckles. Contactless Biometrics has been more prevalent over
+the recent years due to the Covid Pandemic but has paved the way
+for more efficient and effective biometric systems. In the proposed
+work, a new method is proposed of using the Bracelet lines on
+the wrist to identify a person by applying the YOLO model for
+detection of wrists along with Machine Learning Techniques for
+recognition and comparing other related works and techniques,
+the system is created using an Arduino Uno paired with Esp32
+CAM which clicks and send the photo of the user to the server for
+identification. The proposed work is efficient enough to provide
+real-time recognition of the user.
 Index Terms—Internet of Things, Machine Learning, YOLO,
 Contactless Biometrics, Recognition
 I. INTRODUCTION
-The measuring and statistical examination of an individual’s
-distinctive behavioural traits is referred to as biometrics. Although the application of biometrics goes beyond authentication, the main emphasis of this research is recognition utilizing
-biometric data [1]. Authentication is now crucial in many
-areas because of ongoing technical improvements. Numerous
-strategies have been investigated, such as knuckle recognition
-[2], fingerprint recognition [3], and face recognition [4]. These
-techniques do, however, have drawbacks, including the vulnerability to tattoo modifications and development as well as
-difficulties in collecting and analyzing small-sized fingerprints
-and knuckles [5].
-This study proposes employing bracelet lines to identify
-and recognize individuals. The peculiar patterns of lines that
-appear underneath the palm of a hand and persist as people age
-are known as bracelet lines. The uniqueness and detectability
-of these lines in images make them suitable for biometric
-identification [6].
-For diverse objectives, such as vein detection for identification [5] and terrorist profiling [6], prior studies have investigated wrist and arm-based methods. Additionally, forensic
-identification can be carried out via bracelet lines [6]. The
-detection and identification of bracelet lines using machine
-learning approaches for Business applications is the focus of
-this research article.
+Biometrics can be defined as the measurement and the
+statistical of the behavioural characteristics which make a
+person unique, the field of biometrics goes beyond just the
+field of authentication but for the proposed work the focus is
+mainly on the recognition using biometrics [1].
+Over the years, with the increasing technological advancements, authentication has been increasingly demanded in almost every sector, there have been numerous works such as
+recognition using knuckles [2], fingerprints [3], facial recognition [4], etc. However, all of these solutions have drawbacks,
+such as tattoos, changes due to growth and due to the small
+size of the fingerprints and knuckles it is very difficult to
+do proper analysis and expensive technology is required the
+capture these.
+Bracelet Lines are the lines below the palm of a hand, these
+are unique and distinct due to the patterns of the lines, which
+do not change even through the long course of aging and as
+the area is distinctive, it is easy to detect in images and the
+proposed solution can be easy to use.
+For our solution, we created a dataset of 1400+ images of
+people of different age groups as discussed in the sections
+below, which have been used to detect the bracelet lines using
+the YOLO algorithm with an accuracy of 99.8%. After the
+detection various Machine Learning models were deployed
+such as SVM with an accuracy of 82.4%, Random Forest
+with an accuracy of 84.2% and out of all the models, the best
+was given by Neural Network with an accuracy of 98.8%.
+Thus, making the Neural Network model extremely reliable
+for deployment as discussed in the sections below.
+For the deployment, an Arduino Uno R3 is used with an
+ESP32-CAM for clicking and sending the images to the server
+where the detection and recognition models are deployed.
+The proposed work aims to:
+1) Create a low-cost solution for authentication
+2) Creation of a dataset of images that can be uploaded to
+the research community
+3) YOLO based solution based proper detection of bracelet
+lines
+4) Machine Learning based solution for the recognition of
+a person using bracelet lines
+Solutions based using the wrist/arm areas have been implemented before, but using different techniques and purposes,
+in some solutions veins [5] have been detected and in some
+cases, it is used to identify terrorists [6].
+All of the work has been discussed in detail, in the different
+sections of this proposed work. The flow of the paper is
+organized in the following order. Section II provides an
+overview of the techniques used for biometric identification
+and related work done in this area. Section III introduces
+the method for data collection, bracelet line detection and
+recognition. Section V evaluates the performance of YOLOv5
+used for detection and the machine learning algorithms used
+for recognition. Conclusion drawn from our work is present in
+Section VI followed by space for future work in Section VII.
 II. RELATED WORK
-In the absence of readily identifiable features, such as
-faces or tattoos, identification from photographs proves to
-be quite challenging. Thumbprints or fingerprints have long
-been recognized as one of the earliest and widely adopted
-biometric identification methods. The unique patterns and
-ridges present on the fingertips provide a reliable means to
-distinguish individuals from one another. This approach has
-gained immense popularity due to its effectiveness, accuracy,
-and widespread implementation in various domains such as
-law enforcement, border control, and personal device authentication. Thumbprints were employed for recognition in MR
-Ramlan’s 2012 study, which made use of an 8-bit greyscale
-image. The neural network layer then uses each bit plane as
-an input to do recognition. The research works in [?], [?],
-[3] relies on contactless fingerprint detection using various
-techniques, such as creating a model for detection, minimizing
-distortions brought on by image capture, and creating an
-appropriate device for fingerprint recognition, respectively.
-The wrist and arm regions have been used as the foundation for several procedures and applications. One method is
-vein detection, which has occasionally been used to identify
-prospective terrorists [6]. Other continuing investigations have
-investigated novel biometric traits, such as palm vein matching
-[7]. Goh Kah Ong Michael [8] has suggested a test to
-determine how convenient a contactless hand biometric system
-is from the user’s point of view. Furthermore, researchers
-have used smartphones to identify wrist veins, allowing functions such as phone unlocking, online payments, and bank
-account verification [9]. However, the probable occlusion of
-subcutaneous blood vessels by dense adipose tissue makes it
-challenging to take precise pictures, making the identification
-of veins in the palm or wrist problematic [10].
-In situations where accessing faces or tattoos is not feasible,
-other biometric identification methods have been explored.
-These include skin markings [11], androgenic hair [12], and
-hand victory sign patterns [13]. For matching non-latent palmprint images captured by digital cameras, previous methods
-have been developed for commercial biometric applications
-under controlled imaging conditions and with client collaboration [14]–[17].
-In addition to palmprint, other hand-based biometric modalities that have been proposed include finger surface and
-finger-knuckle-print [5], [14]. These techniques have been
-investigated under convenient and controlled circumstances,
-providing prospective substitutes for hand-based biometric
-identification. Contrarily, vein recognition is mostly used in
-commercial applications, where infrared light is used to collect
-photographs of veins in well-regulated settings. Notably, recent
-studies have revealed the possibility of visualizing and analyzing hidden veins in different images for forensic investigations,
-highlighting the potential utility of vein recognition in certain
-scenarios [18]. However, it is important to consider factors
-such as high concentrations of fat or melanin, as well as
-low image quality, which can pose challenges in accurately
-extracting and analyzing veins.
-Another approach uses palm veins [19] as a tool which is
-highly accurate as the pattern of veins are complex, moreover,
-it is better because the authentication data exists inside of the
-human body which makes it impossible to get someone’s palm
-vein structure, but these authentication systems are sensitive to
-factors such as ambient lighting conditions and the positioning
-of the user’s palm
-Skin marks exhibit relevance in the context of highresolution images, where detailed information can be extracted
-for identification purposes. However, it is important to note
-that androgenic hair does not necessarily occur uniformly
-across all body parts, such as the wrists. Similarly, while
-victory signs, palmprints, and finger knuckles can potentially
-offer distinguishing features, they are not commonly employed
-in recognition systems. Thumbprints or fingerprints, despite
-their widespread use, are not immune to alterations caused
-by cuts or burns, which can compromise their reliability as a
-long-term biometric identifier. Other recognition systems may
-present challenges in feature extraction or be susceptible to
-changes over time. Conversely, the wrist region holds promise
-as it can often be observed even when individuals are wearing
-long sleeves and distinctive features like bracelet lines can be
-leveraged for forensic identification [6], [20].
-In the previous solution [21], a dataset comprising over
-1400 images of individuals from diverse age groups was
-created. These images were utilized to detect bracelet lines
-using the YOLO (You Only Look Once) algorithm, achieving
-an impressive accuracy rate of 99.8%. For deployment, an
-Arduino Uno R3 microcontroller and an ESP32-CAM module
-were used. The ESP32-CAM captures and sends the images
-to a server, where the detection and recognition models are
-deployed [21].
-After the detection stage, various machine-learning models
-were deployed for recognition. In the previous research [21],
-Support Vector Machine (SVM) achieved an accuracy of
-82.4%, Random Forest achieved an accuracy of 84.2%, and
-Convolutional Neural Network model outperformed the others
-with an accuracy of 98.8%.
-Contributions to the proposed work are as follows:
-1) Compilation of a dataset consisting of images to be
-shared with the research community.
-2) Implementation of a YOLO-based solution to accurately
-detect bracelet lines.
-3) Utilization of deep learning techniques for person recognition based on bracelet lines.
-The rest of the paper is organized as follows. Section III
-introduces the method for data collection, bracelet line detection and recognition. Section VI evaluates the performance
-of YOLOv5 used for detection and the machine learning
-algorithms used for recognition. The conclusion drawn from
-our work is present in Section VII followed by space for future
-work in Section VIII.
+Identification from images turns out to be extremely difficult
+assuming there are no obvious attributes accessible like faces
+or tattoos. Thumbprints or fingerprints are one of the oldest
+and most widely used methods used for recognition. [7] paper
+used thumbprints for recognition in which they are using an
+8-bit grey level image. Each bit plane is then taken as input
+by the neural network layer for recognition. [8], [9] and [10]
+papers are based on contactless fingerprint detection using
+different methods such as developing their model for detection,
+reducing the deformations caused during image capturing and
+making a proper device for fingerprint recognition respectively.
+But nowadays many new ways for identification have been
+discovered. A few ongoing examinations have looked for new
+biometric characteristics, palm veins [11]. [12] paper presents
+an acclimatization and adjustment test to assess the convenience of a contactless hand biometric framework according
+to the user’s point of view. [13] used smartphones for detecting
+wrist veins for phone unlocking, making online payments, and
+bank account verification. The major drawback of using palm
+or wrist veins for identification is the possibility of thick fatty
+tissue obstructing the subcutaneous blood vessels. In such a
+scenario capturing pictures will be difficult.
+Some of the other techniques for biometric identification
+include skin marks [14], androgenic hair [15], and hand victory
+sign patterns [16], for handling the situation where accessing
+faces or tattoos is difficult. Existing palmprint recognition
+techniques are [17], [18], [19], [20], [21] for matching nonlatent palmprint pictures taken from digital cameras centre
+around commercial biometric application with client collaboration and very much controlled imaging conditions.
+In addition to palmprint, other comparable hand-based
+biometrics proposed in the writing incorporate, e.g., finger
+surface [22] and finger-knuckle-print [23] [17] in very much
+controlled and helpful conditions. Vein acknowledgment is
+chiefly utilized for business applications, where vein pictures
+are caught under infrared light in very much controlled
+conditions. Recently, specialists show that a few veins are
+concealed in various pictures and can be visualized for forensic
+investigation. The vein recognition methods depend on high
+picture goal and clear visualized veins, which are in some
+cases difficult to be extracted due to high concentration of fat
+or melanin or low image. [24]
+Skin marks are relevant to high-resolution images only and
+androgenic hair doesn’t necessarily in every case happen in
+some body parts e.g., wrists. Victory signs, palmprints and
+finger knuckles are not generally seen in recognition. Then
+again, the wrist might probably be noticed even though the
+subjects are wearing long sleeves, welcoming or saluting.
+Bracelet lines can be used for forensic identification [6]
+[25]. Our paper focuses on using bracelet line detection and
+recognition using machine learning for business purposes.
 III. METHODOLOGY
 In this section, the method for data collection, bracelet line
 detection and recognition is described. In the first phase, data
 collection is done through various sensors. The technologies
 used for the data collection process are as follows:
-A. Technologies Used
-1) Arduino Uno R3: The Arduino Uno R3 is a small
-microcontroller with an 8-bit processor known as the
-ATmega328p. It has 14 digital pins that may be used as
-both inputs and outputs, 6 of which can generate PWM
-(Pulse Width Modulation) signals. It also has 6 analogue
-input ports for reading analogue inputs.
-The Arduino Uno R3’s support for numerous communication protocols, including as UART, SPI, and I2C,
-is one of its most significant features. This enables
-seamless connection with various devices and sensors,
-allowing for flexible project development.
-In terms of power, the Arduino Uno R3 may take power
-from a variety of sources. The USB-B connector, the
-barrel plug, or the Vin port may all be used to power it.
-Furthermore, the board has a specialised power regulator
-as a precautionary step to defend against any harm.
-Even in the worst-case situation, the failure is usually
-restricted to a single pin, distinguishing it from other
-microcontrollers that may have whole board burnouts.
-This feature distinguishes the Arduino Uno R3 as a
-remarkable and one-of-a-kind alternative for prototyping
-applications.
-2) ESP32-CAM:The OV2640 camera module is a small
-device powered by the ESP32 processor, a 32-bit microcontroller noted for its versatility. This module, which
-has an inbuilt TF card slot, is widely used in video
-monitoring, image uploads, and other related operations.
-It has Wi-Fi and Bluetooth capabilities, as well as compatibility with several communication protocols. This
-feature set makes it ideal for small-scale applications.
-Furthermore, because of its numerous sleep modes, the
-module’s power consumption is incredibly low, allowing
-it to run on as little as 6mA of current. Its tiny size,
-extensive feature set, and low power consumption make
-it a useful tool for smooth integration in a variety of
-projects.
+A. Technology Used
+1) Arduino Uno R3: Arduino Uno R3 is a small microcontroller, with an 8-bit processor which ATmega328p,
+consisting of 14 Digital Pins that can be used as input
+and output out of which 6 can be used as PWM outputs
+and also, has 6 analog input pins. With all these ports it
+can support multiple communication protocols such as
+UART, SPI and I2C.
+For power, it can take power from the USB-B connector
+or the Barrel Plug and even from the Vin Port. What
+makes it unique for prototyping, it has another power
+processor which prevents damage on the board, and
+even in worst cases only has a dead pin, unlike other
+microcontrollers which often have burnouts on the entire
+board, making this an excellent choice for prototyping.
+2) ESP32-CAM: This is a small-sized, OV2640 camera
+module that uses the ESP32 processor which is a 32-bit
+processor and has a TF card slot onboard. It is widely
+used for video monitoring, image uploads etc. having
+an inbuilt functionality for Wi-Fi and Bluetooth along
+with multiple communication protocols, it is extremely
+handy for small applications and even has low power
+consumption due to multiple sleep modes with current
+as low as 6mA.
+Due to its small size and features, it is extremely handy
+for this project and helps for a seamless connection.
 3) Communication Between Arduino Uno R3 and
-ESP32-CAM: The Tx (transmit) and Rx (receive) ports
-on both devices are used to communicate between the
-Figure 1: Circuit diagram with GPIO0 pin grounded
-Figure 2: Circuit diagram with GPIO0 pin not grounded
-two boards. The Arduino acts as a fake microcontroller
-in this design, making programming the ESP32-CAM
-module easier. To activate programming mode, connect
-the ESP32-CAM’s GPIO 0 pin to the ground. When
-programming using the UART protocol is finished, the
-GPIO 0 pin is detached from the ground. At this point,
-the Arduino serves not just as a power supply but also
-as an efficient interface for testing. The Arduino IDE
-may be used to connect to the ESP32-CAM module and
-transport data to the necessary server. The utilisation of
-the same microcontrollers throughout the whole process,
-including deployment, makes this entire configuration
-quite convenient.
-4) Arduino IDE:The Arduino IDE is a widely acclaimed
-and commonly used integrated development environment for programming small microcontrollers. With its
-range of libraries and comprehensive features, it supports a variety of sensors and microcontrollers, making
-it highly versatile. The IDE’s user-friendly interface
-ensures easy installation and facilitates programming
-in C/C++. Additionally, it offers charting and monitoring capabilities, aiding in project development. Its
-portability allows for convenient programming on the
-go. In essence, the Arduino IDE combines simplicity,
-versatility, and portability, making it a valuable tool for
-efficiently programming tiny microcontrollers.
+ESP32-CAM: For the communication between the two
+boards, Tx and Rx ports are used on both. The Arduino
+is then used as a dummy microcontroller, which enables
+us to program the ESP32-CAM which is, in turn, acting
+as a dummy controller to be programmed as we connect
+the GPIO 0 pin to the Ground. Once the programming
+is done using the UART protocol, the GPIO 0 pin is
+removed from the ground. The Arduino now acts as a
+power source as well as a good interface for the testing
+as we can use the Arduino IDE to generate the links and
+to route the data from the ESP32-CAM to the Server
+needed.
+This entire setup is very convenient as it allows the same
+microcontrollers to be re-used through the entire process,
+as well as for the deployment.
+4) Arduino IDE: The Arduino IDE is one of the best and
+most widely used IDE for the programming of small
+microcontrollers. It has multiple enabled functions for
+plotting and monitoring.
+It can be used for almost all the sensors as well as small
+microcontrollers, using different libraries. This IDE is
+easy to install and can be used on the go, using C/C++
+for programming.
 B. Setup
 For the prototyping setup, the ESP32-CAM is connected
 with the Arduino Uno R3, where the Arduino is a dummy
 microcontroller along with ESP32-CAM which is, in turn, a
-dummy microcontroller while the IDE loads the code. This is
+dummy microcontroller while the IDE loads the code, this is
 achieved by grounding the RESET pin of the Arduino Uno
-Figure 3: Circuit diagram during deployment
-Figure 4: Actual Setup
 R3 and by grounding the GPIO 0 pin of the ESP32-CAM as
-shown in Figure 1.
+shown in figure 1 below.
 This makes Arduino the perfect interface for programming
 the ESP32-CAM. Once the code is uploaded, the GPIO 0 pin
-is removed from the ground as shown in Figure 2. Next, the
+is removed from the ground as shown in figure 2. Next, the
 Arduino IDEs serial monitor can be used to get the generated
 URL from the ESP32-CAM, which is used to see the image,
-this can be adjusted to send it to the server. Arduino also acts
+this can be adjusted to send to the server. Arduino also acts
 as a constant power source for the ESP32-CAM.
 Once, the prototyping is done and the device is ready to be
 deployed the setup now consists of the Arduino Uno R3 as a
-power source for the ESP32-CAM as shown in Figure 3. The
-actual setup is shown in Figure 4 which will be used further.
+Figure 1: Circuit diagram with GPIO0 pin grounded
+Figure 2: Circuit diagram with GPIO0 pin not grounded
+power source for the ESP32-CAM as shown in figure 3.
 Next, the ESP32-CAM sends the data to the server through
 Wi-Fi connectivity where further processing and recognition
 are done on the image.
 C. Data Collection
 Dataset Collection is one of the most crucial points in any
-work, as it determines how well the models get trained, if
-the dataset is not accurate it can cause failures. Thereby, all
-the dataset images were taken with extreme caution to avoid
-Figure 5: Sample Dataset
-any corrupt or bad data. For the proposed work, over 2300+
-images of both the wrists of 80 people were taken so that
-detection and recognition techniques can be performed. The
-dataset consisted of multiple age groups of people, ranging
-from 15-year-old to 60-year-old people. This is to get wider
-subject data for better analysis. The actual setup is shown in
-Figure 4 and some of the sample data images are shown in
-Figure 5.
+work, as it determines how well the models get trained, if the
+dataset is not accurate it can cause failures. Thereby, all the
+dataset images were taken with extreme caution to avoid any
+corrupt or bad data.
+For the dataset of over 1400+ images, images of both the
+wrists of people were taken so that detection and recognition
+techniques can be performed.
+The dataset consisted of multiple age groups of people,
+ranging from 15-year-old to 60-year-old people. This is to
+get wider subject data for better analysis. Some of the sample
+data is shown in the figure 5.
 The images were taken at multiple angles and multiple
-distances from the wrist [22], which enables better training of
+distances from the wrist [26], which enables better training of
+Figure 3: Circuit diagram during deployment
+Figure 4: Actual Setup
 the detection algorithm which is further used in the recognition
 algorithm.
 D. Bracelet Lines detection using Yolov5
@@ -252,16 +223,16 @@ The collected data samples are fed to the Yolov5 model for
 detecting bracelet lines and then to machine learning models
 for training. You only look once (YOLO) is a state-of-the-art,
 real-time object detection system. YOLO architecture is more
-like FCNN (fully convolutional neural network) and passes
-the image (n × n) once through the FCNN and the output is
-(m × m) prediction. The architecture splits the input image
-in (m × m) grid and for each grid generation, two bounding
-boxes and class probabilities for those bounding boxes are
-there. YOLO trains on full images and directly optimises
-detection performance. The YOLO design empowers start-tofinish preparation and real-time speeds while keeping up with
-high accuracy. This unified model has several benefits over
-traditional methods of object detection, some of which are
-listed below:
+like FCNN (fully convolutional neural network) and passes the
+image (n×n) once through the FCNN and the output is (m×
+m) prediction. The architecture is splitting the input image in
+(m×m) grid and for each grid generation two bounding boxes
+and class probabilities for those bounding boxes. YOLO trains
+on full images and directly optimises detection performance.
+The YOLO design empowers start-to-finish preparation and
+real-time speeds while keeping up with high accuracy. This
+unified model has several benefits over traditional methods of
+object detection, some of them are listed below:
 1) YOLO is extremely fast. Since the detection is framed as
 a regression problem, a complex pipeline is not required.
 The neural network is run on a new image at test time to
@@ -271,17 +242,18 @@ and a fast version runs at more than 150 fps. This means
 streaming video can be processed in real-time with less
 than 25 milliseconds of latency.
 2) YOLO reasons globally about the image when making
-predictions. Unlike sliding window and region proposalbased techniques, YOLO sees the entire image during
+predictions. Unlike sliding window and region proposalbased techniques, YOLO sees the entire image during
 training and test time so it implicitly encodes contextual
 information about classes and their appearance.
 3) YOLO learns generalizable representations of objects.
 When trained on natural images and tested on the
+Figure 5: Sample Dataset
 artwork, YOLO outperforms top detection methods like
-Deformable Part Model (DPM) and Region-Based Convolutional Neural Network (R-CNN) by a wide margin.
+Deformable Part Model (DPM) and Region-Based Convolutional Neural Network (R-CNN) by a wide margin.
 Since YOLO is exceptionally generalizable it is less
 likely to break down when applied to new domains or
 unexpected inputs.
-YOLO Version 5 launched in 2020 by Ultralytics [23] is
+YOLO Version 5 launched in 2020 by Ultralytics [27] is
 considered in this work and is currently the most advanced
 object identification algorithm available. YOLOv5 is different
 from all other prior releases, as this is a PyTorch execution as
@@ -293,24 +265,22 @@ smaller than YOLOv4 (27 MB vs 244 MB), 180% faster than
 YOLOv4 (140 FPS vs 50 FPS) and is roughly as accurate as
 YOLOv4 on a similar errand (0.895 mAP vs 0.892 mAP).
 YOLOv5 is customised in this work to only identify bracelet
-lines and no other objects. The YOLOv5 model is provided
-with our dataset of images of hands and their corresponding
-wrist labels for training and testing. The YAML file was
-changed with our customised file giving several classes as one
-Figure 6: Detection of Bracelet Lines from Hand
-and a class name as ’wrist’. Next, the model is trained with
+lines and no other objects. We have provided the YOLOv5
+model with our dataset of images of hands and their corresponding wrist labels for training and testing. We changed the
+YAML file with our customised file giving several classes as
+one and class name as ’wrist’. We trained the model with
 850 images and 85 images for validation with 100 epochs.
 YOLOv5 uses several hidden layers and assigns weights
-accordingly. The weights which gave the best result among
-all the epochs are considered. Next, these weights are used to
+accordingly. We have used the weight which gives the best
+result among all the epochs. Next, we use these weights to
 detect a new bracelet line. A few examples of detected bracelet
-lines are shown in Figure 6. Once the wrist is identified, it is
+lines are shown in figure 6. Once the wrist is identified, it is
 cropped and sent to machine learning models for recognition.
 E. Classification
-The data is split into a ratio of 0.3 for testing and training
+The data is split into the ratio of 0.3 for testing and training
 for all the classifiers. The seven machine learning models
 considered in the work are as follows:
-1) Logistic Regression: Logistic regression is the appropriate regression analysis when the dependent variable is binary.
+1) Logistic Regression: Logistic regression is the appropriate regression analysis when the dependent variable is binary.
 Like all regression analyses, logistic regression is a predictive
 analysis. It is used to display information and to explain the
 connection between one dependent variable and at least one
@@ -333,15 +303,16 @@ log p(y = l)
 1 − (p = l)
 = β0 + β1.x1 + β2.x2 + ... + βp.xp (2)
 for l = 1. . . n.
-In this logistic regression equation, logistic(µ) is the dependent or response variable and x is the independent variable.
+In this logistic regression equation, logistic(µ) is the dependent or response variable and x is the independent variable.
 The beta coefficient in this model is estimated by Maximum
-Likelihood Estimation (MLE). This method tests various values of beta through repeated iterations to optimize for the
-best fit of log odds. All of these iterations produce the loglikelihood function, and logistic regression tries to maximize
+Likelihood Estimation (MLE). This method tests various values of beta through repeated iterations to optimize for the
+best fit of log odds. All of these iterations produce the loglikelihood function, and logistic regression tries to maximize
 this function to find the best parameter estimate. When the
+Figure 6: Detection of Bracelet Lines from Hand
 ideal coefficients are found, the conditional probabilities for
 each observation can be calculated, logged, and added together
 to get a predicted probability.
-2) Support Vector Machine: Support Vector Machine
+2) Support Vector Machine: Support Vector Machines
 (SVM) is a fast and dependable classification algorithm that
 performs very well when there is a shortage of data to analyze.
 SVM can categorize new text once it has given a set of
@@ -386,27 +357,173 @@ between all
 pairs of training observations.
 An SVM takes data points and outputs the hyperplane that
 best separates the tags. This line is the decision boundary:
-anything that falls to one side of it will be classified as one
-tag and anything that falls to the other as another tag. For
+anything that falls to one side of it we will classify as one
+tag, and anything that falls to the other as another tag. For
 SVM, the hyperplane is the one that maximizes the margins
-from both tags. In other words: the hyperplane (like a line,
-or circle) whose distance to the nearest element of each tag
-Figure 7: Custom Vgg Architecture
-is the largest. When the data is not linearly separable, a third
-dimension is added to separate the tags. The idea of mapping
+from both tags. In other words: the hyperplane (like line,
+circle) whose distance to the nearest element of each tag is
+the largest. When the data is not linearly separable, we add
+a third dimension to separate the tags. The idea of mapping
 higher dimensions to the model can get pretty computationally
 expensive. There can be a lot of new dimensions and each one
 of them might involve a complicated calculation. Doing this
 for every vector in the dataset can be a lot of work, so it will
 be better to find a cheaper solution.
-3) Convolutional Neural Network: A convolutional neural
+3) Gaussian Na¨ıve Bayes Classifier: Na¨ıve Bayes is a
+probability-based machine learning algorithm based on the
+Bayes Theorem, used in a wide variety of classification tasks.
+Bayes’ Theorem, named after Reverend Thomas Bayes, is a
+mathematical formula used to calculate conditional probabilities. Bayes theorem determines the probability of event A
+given that event B has already occurred.
+P(A|B) = P(B|A).P(A)
+P(B)
+(6)
+The above formula tells us how often A happens given
+that B happens, written as P(A—B) also called posterior
+probability. P(B—A) represents how often B happens given
+that A happens. P(A) and P(B) represent the happening
+of event A and event B on their own respectively. Bayes’
+Theorem is simply a way to find a probability when certain
+other probabilities are known. In Gaussian Na¨ıve Bayes, we
+assume that continuous values associated with each feature
+are distributed according to a Gaussian distribution. When a
+Gaussian distribution curve is plotted, it forms a bell-shaped
+curve that is symmetric to the mean of the feature values as
+shown:
+If any feature contains numerical values instead of categories then it can be transformed into categorical counterparts
+before creating their frequency tables. The other option can
+be to use the distribution of the numerical variable to have a
+good guess of the frequency. Let’s assume a training data set
+containing X continuous attributes. The data is divided by the
+target value. The mean µ and variance σ
+2 of X is calculated
+for each target value according to the given formula.
+µ =
+1
+n
+Xn
+i=1
+xi (7)
+σ
+2 =
+1
+n − 1
+Xn
+i=1
+(xi − µ)
+2
+(8)
+Conditional probability from some observation value x
+whose features are assumed to be Gaussian can be given by:
+P(x) = 1
+√
+2πσ2
+e
+− (x − µ)
+2
+2σ
+2
+(9)
+Na¨ıve Bayes algorithms are based on over-simplified assumptions yet have worked quite well in many real-world
+situations like document classification, emotion analysis, spam
+filtering, etc. They can be easily trained over a small dataset to
+estimate the necessary parameters. Naive Bayes classifiers can
+be much faster as compared to more sophisticated methods.
+Their biggest disadvantage is the requirement for attributes to
+be independent.
+4) K- Nearest Neighbour: K-Nearest Neighbor is one of
+the least difficult Machine Learning calculations based on
+Supervised Learning techniques. K-NN algorithm expects the
+likeness between the new information and available information and put the new case into the classification that is
+generally like the accessible classifications.
+K-NN stores every one of the accessible information and
+groups another information point based on the similarity. This
+implies when new information shows up then it tends to be
+effectively characterized into a decent suite class by using KNN. K-NN is a non-parametric algorithm, and that implies it
+makes no presumptions on essential information.
+KNN algorithm at the training stage simply stores the
+dataset and when it gets new information, then it classifies
+that information into a classification that is much like the new
+information.
+There is no specific method for deciding the best incentive
+for ”K”, so we want to try some values to find the best out of
+them. The most favoured value for K is 5. An extremely low
+value for K like K=1 or K=2, can be noisy and lead to the
+impact of outliers in the model. Large values of K are good
+but can make the model slow.
+5) Decision Tree: A decision tree is a classifier where the
+model mimics human decision-making logic. In a decision
+tree, each internal node splits the training examples into at
+least two sub-trees according to a specific condition. In the
+most simple implementations, the split condition takes into
+account a single predictor. The observations falling to each
+leaf node ideally belong to a particular category.
+Every node relates to a specific property, and the branches
+compare to a range of values. This range of values divides
+the dataset according to a specific property. New nodes are
+classified by traversing the tree, beginning from the root and
+going down to a leaf, which is entirely determined by the
+result of the condition at every node.
+In particular, we start at the root node of a tree and consider
+the node that relates to the root condition. We then determine
+which branch the observed value of the given attribute corresponds to. The next node in our way is the one toward the
+finish of the chosen branch. We repeat this process and traverse
+the tree until we arrive at a leaf.
+Note that decision tree splits can be based on both categorical and numeric variables. On account of numeric qualities,
+decision trees can be mathematically interpreted as a collection
+of hyperplanes, each symmetrical to one of the axes. Normally,
+a less complicated decision tree is favoured, as it is easier to
+understand and implement. Tree complexity vitally affects its
+accuracy and generalisation capacity.
+Large decision trees suffer from overfitting on the information and thus display poor accuracy on the test set. A big decision tree can sum up well to new patterns if it was prompted
+without overfitting the information. The tree complexity is
+constrained by the stopping criteria used to construct the tree
+and the pruning technique that is utilised. Common measures
+for the tree complexity include the following measurements:
+(a) the total number of nodes and leaves
+(b) tree depth
+(c) the number of attributes used
+6) Random Forest: In Random Forests, the trees are trained
+on bootstrapped samples but at the time of splitting, only a
+subset of the total number of features is considered i.e. for
+each split to be made, m ¡ M predictors are considered where
+M is the total number of features. As an accepted practice,
+most practitioners prefer m to be nearly equal to the square
+root of M.
+This practice is useful in the presence of some very strong
+predictors. If such predictors are present then each tree will
+use these predictors during splitting to minimise the chosen
+criterion and end up looking like each other. By decorrelating,
+the trees we are forcing each of them to be trained on a
+different set of features as well as different sets of instances.
+Averaging these uncorrelated trees also results in a further
+decrease in the overall variance of the model.
+Random forests introduce variance in the trees by randomly
+selecting a subset of given features at each “split point” while
+making the trees. By forcing only a subset of features to be
+considered, each decision tree is effectively trained on a more
+different dataset. Due to this decorrelation, the collective error
+made by the model is lower and the average performance is
+often better than the individual trees.
+Random Forests use bootstrap samples to train a collection
+of decision trees. Of the training sample, a certain portion
+(about one-third) of the data is set aside for validation.
+This sample is also called an out-of-bag sample. Feature
+bagging is also performed to introduce added randomness to
+the ensemble. The outputs of each tree are then collectively
+used to obtain the final prediction - the outputs are averaged
+in case of regression and majority voting is performed for
+classification tasks where the most frequent prediction (the
+mode) is picked as the result. The out-of-bag sample is used
+for cross-validation and finalising the predictor.
+7) Convolutional Neural Network: A convolutional neural
 network, or CNN, is a deep learning neural network intended
 for handling structured arrays of data such as images. They
 are broadly utilized in computer vision and have turned into
 the cutting edge for the majority of visual applications like
 image classification, and have also found success in natural
 language processing for text classification.
-A CNN model converts input data to yield class probabilities through a progression of a few hidden units that
+A CNN model converts input data to yield class probabilities through a progression of a few hidden units that
 incorporate convolutional, pooling, and fully connected layers
 or also known as dense layers. In our work we have used 4
 convolutional neural network layers, followed by a flattened
@@ -421,54 +538,8 @@ into an output dense layer containing the number of neurons
 same as the input classes using the activation function softmax.
 We have also used dropout to check which filters work better
 with our model.
-4) ResNet: ResNet (Residual Neural Network), is a deep
-learning architecture that has been widely used and highly
-influential in the field of computer vision. The main innovation
-of ResNet was the introduction of residual connections or
-skip connections [24]. These connections allow the network to
-skip over certain layers, enabling the training of much deeper
-networks without suffering from the degradation problem.
-The degradation problem refers to the difficulty of training
-deep neural networks due to diminishing performance as the
-network depth increases. By using residual connections, the
-gradient flow and information propagation through the network
-are improved, enabling the training of networks with hundreds
-or even thousands of layers.
-ResNet architectures typically consist of several residual
-Figure 8: Resnet Model Summary
-blocks. Each residual block contains multiple convolutional
-layers, along with skip connections that bypass some of the
-convolutional layers. These skip connections help in preserving the gradient flow and facilitate the training of deep
-networks. Different versions of ResNet have been proposed
-from which we used ResNet-50. It has 50 layers and introduces
-bottleneck residual blocks. The bottleneck blocks consist of
-three convolutional layers, reducing the computational complexity compared to plain residual blocks.
-5) Vgg: VGG (Visual Geometry Group), a deep convolutional neural network architecture, developed by researchers at
-the University of Oxford [24], is renowned for its remarkable
-performance in image classification tasks. With its distinctive
-simplicity and depth, VGG has significantly contributed to
-the advancement of computer vision. The architecture’s key
-characteristic is its stack of convolutional layers, enabling
-it to capture intricate hierarchical features within images.
-VGG’s emphasis on depth and uniform filter sizes has proven
-effective in extracting intricate visual patterns. Its success
-has influenced subsequent neural network designs and serves
-as a foundation for understanding the importance of depth
-in convolutional neural networks. It stands for ”Very Deep
-Convolutional Networks for Large-Scale Visual Recognition”.
-It demonstrated that increasing the depth of the network can
-improve the accuracy of image classification tasks.
-The key characteristic of VGG networks is their simplicity.
-The architecture consists of a series of convolutional layers,
-followed by max-pooling layers, and finally a few fully
-connected layers. VGG networks have a fixed-size input of
-224x224 RGB images, which are passed through a stack of
-convolutional layers with small receptive fields (3x3 filters)
-and a stride of 1 pixel. Max-pooling layers with 2x2 filters
-and a stride of 2 pixels are used to downsample the spatial
-dimensions.
 F. Measures for comparison
-The various performance measures considered for the comparison of the machine learning algorithms are as follows:
+The various performance measures considered for the comparison of the machine learning algorithms are as follows:
 1) True Positive (TP)- Outcome when a model correctly
 predicts the positive class sample as belonging to the
 positive class.
@@ -478,7 +549,7 @@ negative class.
 3) False Positive (FP)- Outcome when a model incorrectly
 predicts the negative class sample as belonging to the
 positive class.
-4) False Negative (FN)- Outcome when a model incorrectly predicts the positive class sample as belonging to
+4) False Negative (FN)- Outcome when a model incorrectly predicts the positive class sample as belonging to
 the negative class.
 Further, the four parameters used for the evaluation of the
 machine learning algorithms are:
@@ -487,7 +558,7 @@ predictions to the total number of input samples.
 Accuracy =
 T P + T N
 T P + T N + F P + F N
-2) Precision - Precision gives the proportion of identifications, actually correct.
+2) Precision - Precision gives the proportion of identifications, actually correct.
 P recision =
 T P
 T P + F P
@@ -501,110 +572,92 @@ and recall.
 F1Score =
 2 ∗ P recision ∗ Recall
 P recision + Recall
-IV. OUR PRE-PROCESSING APPROACH
-First, we converted the RGB image to grayscale. Then we
-performed a Laplacian transformation on the images with a
-threshold.Then we applied Gaussian blurring to all the images.
-We again performed the thresholding.
-G(x, y) = 1
-2πσ2
-e
-−
-x
-2+y
-2
-2σ2
-Final images were divided into training and testing sets and
-further sent for recognition.
-V. IMPLEMENTATION
-The initial stage in the implemented technique was to create
-a dataset, as explained in Section III-C. This dataset was used
-to train a YOLO algorithm-based model, which proved to be
-very accurate with a precision of 99.5%, as mentioned in the
-previous SectionIII-D. This model was created particularly to
-recognise bracelet lines in wrist photos.
-Figure 9: Implementation Model of Our Work
-Bracelet line extraction is critical for subsequent recognition
-procedures since effective machine learning is strongly reliant
-on the quality of pre-processed data. After pre-processing the
-data, the weights file was utilised to train the machine learning
-models.
-During the procedure, the ESP32CAM device took images
-of people’s wrists, which were subsequently sent to the application. The bracelet lines were retrieved from the photographs
-by the program and passed to the deep learning model. We
-used the VGG-net [24]architecture in our proposed work since
-it produced the greatest outcomes in our testing. Using the preprocessed data, many machine learning models were trained,
-and their performance was assessed using different metrics
-such as accuracy and precision, as explained in SectionIII-E.
-When an image is provided to the identification model,
-it identifies the individual using the extracted bracelet lines
-and saves the information as the output.As a result, our
-suggested method accomplishes contactless recognition using
-a unique manner. Figure9 depicts a simple implementation of
-our proposed model.
-VI. RESULTS AND DISCUSSION
+Figure 7: Implementation Model of Our Work
+IV. IMPLEMENTATION
+In the proposed work, after the dataset was created, as
+discussed in Section III-C, a YOLO algorithm-based model as
+described in earlier Section III-D was created for the efficient
+detection of bracelet lines on the wrist images.
+This model provides very high accuracy of 99.5%, this
+extraction helps for further recognition techniques as the
+machine learning techniques rely heavily on the pre-processing
+of the data. Once, the data was pre-processed, the weights file
+is then sent for the training of the machine learning models.
+In the working, the ESP32CAM captures the photograph
+of the person’s wrist and then passes it on to the application,
+where the bracelet lines are extracted from the image and sent
+to the working machine learning model in our proposed work
+it is a convolutional neural network and it was the best fit.
+Many different machine learning models were trained using
+the pre-processed data and were judged on different criteria
+such as Accuracy, Precision as seen in Section III-E.
+Once the image is sent, then the recognition model identifies
+the person and therefore is noted and sent as the output.
+Thereby, the recognition is done completely through a
+contactless interface with a new technique. A basic implementation model is shown in the figure 7.
+V. RESULTS AND DISCUSSION
 In this section, results and a comparison of the various
-machine-learning algorithms for the detection and recognition
+machine learning algorithms for the detection and recognition
 of bracelet lines are presented. The dataset consists of a total
-of 1400+ right and left-hand images of 85 people. A sample
-image of training and validation data is shown in Figure 10.
-The customised YOLOv5 model was giving an accuracy of
-99.5%. The details result is present in Figure 11.
-Table I: Result of Machine/Deep Learning Models
-Accuracy Precision Recall F1 Score
-Logistic Regression 0.931 0.932 0.933 0.922
-SVM 0.938 0.937 0.939 0.931
-CNN 0.801 - - -
-ResNet 0.9234 - - -
-Vgg 0.9536 - - -
-Training Batch
-Validation Batch
-Prediction
-Figure 10: Training and Validation Sample
-Table II: Result of Deep Learning Models
-Train acc Train loss Val acc Val loss
-CNN 0.9793 0.1299 0.8005 2.0547
-ResNet 0.9993 0.0073 0.9234 0.3947
-Vgg 1.0000 0.0070 0.9536 0.2450
-Next, the above-detected images are used for image recognition. Table I represents the result of machine learning and
-Deep Learning models considered in this work.
-As indicated by the results in the table I, all algorithms
+of 1400+ right and left-hand images of 85 people. Let’s first
+discuss the results of the detection model. A sample image
+of training and validation data is shown in figure 8a. Our
+customised YOLOv5 model was giving an accuracy of 99.5%.
+The details result is present in figure 9.
+Now talking about the recognition models. We have used
+the above-detected images for image recognition. Table I
+represents the result of our seven machine learning models.
+As indicated by the results in the table, all seven algorithms
 show a decent performance and give a comparable value for
-all the measures. VGG performs slightly better than the other
-algorithms. The accuracy vs epoch curve of VGG is given in
-Figure 12.
-(a) Confusion Matrix (b) Labels (c) Labels Correlation
-(d) Result (e) F1-score curve (f) Precision curve
-(g) Recall curve (h) Precision-Recall curve
-Figure 11: Result of YOLOv5 bracelet line detection model
-VII. CONCLUSIONS
+all the measures. CNN performs slightly better than the other
+(a) Training Batch (b) Validation Batch (c) Prediction
+Figure 8: Training and Validation Sample
+(a) Confusion Matrix (b) Labels (c) Labels Correlation (d) Result
+(e) F1-score curve (f) Precision curve (g) Recall curve (h) Precision-Recall curve
+Figure 9: Result of YOLOv5 bracelet line detection model
+Table I: Result of Machine Learning Models
+Accuracy Precision Recall F1 Score
+Logistic Regression 0.804 0.783 0.799 0.768
+SVM 0.824 0.821 0.823 0.799
+Gaussian NBC 0.781 0.791 0.776 0.766
+KNN 0.801 0.806 0.804 0.778
+Decision Tree 0.585 0.582 0.579 0.547
+Random Forest 0.842 0.807 0.831 0.802
+CNN 0.988 0.978 0.982 0.988
+algorithms. The accuracy vs epoch curve of CNN is given in
+the figure 10. Random forest gives less accuracy than CNN but
+by increasing the depth of the tree we can increase its accuracy.
+KNN, SVM and Logistic Regression give a close value for all
+the four parameters. Gaussian Naive Bayes classifier gives a
+slightly lesser accuracy. The decision tree performs the lowest
+Figure 10: Accuracy versus Epoch curve
+of all the algorithms.
+Figure 11: Loss versus Epoch curve
+VI. CONCLUSION
 The study of human bracelet line detection and recognition
-holds significant potential in various applications, including
-personal identification. While various body parts such as veins,
-fingerprints, and palmprints have been utilized for identification, this work focuses on the utilization of bracelet lines for
-data collection. The dataset comprises wrist images obtained
-from over 85 individuals. The YOLOv5 detection algorithm,
-known for its exceptional performance, was selected for this
-task. As there has been limited research in recognition using
-bracelet lines, several machine learning algorithms were explored to determine the most effective approach. Convolutional
-Neural Networks (CNNs) demonstrated superior performance
-across all evaluation metrics, including accuracy, precision,
-recall, and f1-score. With the proposed methodology, wristbased identification becomes accessible and reliable.
-VIII. FUTURE WORK
-In future work, we will transition to a Raspberry Pi development board for faster processing in the Arduino-based project
-on contactless recognition using bracelet lines. A user-friendly
-interface with an LCD display and wireless connectivity (WiFi or Bluetooth) will enable remote control and automation.
-The system will be designed for scalability, accommodating
-Figure 12: Resnet Results
-Figure 13: Vgg Results
-more users and wrist images. Continuous database updates
-with diverse images will improve algorithm accuracy over
-time. Moreover, Building upon this work, the next step
-involves extending the technique to identify individuals of
-interest using camera footage and enabling real-time tracking.
-By extracting wrist images from surveillance cameras, this
-method can be applied for various purposes, such as security,
-asset protection, and monitoring.
+has many applications. Different body parts can be used for
+personal identification like veins, fingerprints, palmprints etc.
+In this work, bracelet lines were used for the data collection.
+We took the images of wrists of over 85 people. We used
+the YOLOv5 detection algorithm as it is the most recent and
+gives phenomenal results. As much work is not done in the
+field of recognition using bracelet lines so we used several
+machine learning algorithms to see which gives the better
+result. Convolutional Neural Networks give the highest result
+in all 4 parameters, i.e., accuracy, precision, recall and f1-
+score. We can say that we have successfully achieved all our
+aims as mentioned in Section I.
+VII. FURTHER WORKS
+Using the current proposed work, it is now easy to identify
+a person using the wrist. For the next step, it is intended that
+we may be able to identify a person of interest through footage
+cams and keep track of the person of interest.
+As this technique can enable us to identify a person with
+only some dataset images, it is possible to extract the wrist
+images from the cameras and then used them for this purpose.
+It can help keep track at any camera point and thereby, can
+be used for various purposes such as security, protection of
+assets, etc.
 REFERENCES
 [1] Alberto de Santos-Sierra, Carmen Sanchez-Avila, Gonzalo Bailador ´
 Del Pozo, and Javier Guerra-Casanova. Unconstrained and contactless
@@ -612,78 +665,88 @@ hand geometry biometrics. Sensors, 11(11):10143–10164, 2011.
 [2] Kevin HM Cheng and Ajay Kumar. Contactless biometric identification
 using 3d finger knuckle patterns. IEEE transactions on pattern analysis
 and machine intelligence, 42(8):1868–1883, 2019.
-[3] AM Mahmud Chowdhury and Masudul Haider Imtiaz. Contactless fingerprint recognition using deep learning—a systematic review. Journal
-of Cybersecurity and Privacy, 2(3):714–730, 2022.
+[3] Pierre Baldi and Yves Chauvin. Neural networks for fingerprint
+recognition. neural computation, 5(3):402–418, 1993.
 [4] Yi Sun, Ding Liang, Xiaogang Wang, and Xiaoou Tang. Deepid3:
 Face recognition with very deep neural networks. arXiv preprint
 arXiv:1502.00873, 2015.
-[5] Lin Zhang, Lei Zhang, David Zhang, and Hailong Zhu. Online
-finger-knuckle-print verification for personal authentication. Pattern
-recognition, 43(7):2560–2571, 2010.
-[6] Wojciech Michal Matkowski, Frodo Kin Sun Chan, and Adams Wai Kin
-Kong. A study on wrist identification for forensic investigation. Image
-and Vision Computing, 88:96–112, 2019.
-[7] Hengyi Zhang, Chaoying Tang, Adams Wai-Kin Kong, and Noah Craft.
-Matching vein patterns from color images for forensic investigation.
-In 2012 IEEE Fifth International Conference on Biometrics: Theory,
-Applications and Systems (BTAS), pages 77–84. IEEE, 2012.
-[8] Goh Kah Ong Michael, Tee Connie, and Andrew Teoh Beng Jin. A
-preliminary acclimatization study of a contactless biometrics using palm
-vein feature. In 2011 6th IEEE Conference on Industrial Electronics and
-Applications, pages 1022–1027. IEEE, 2011.
-[9] Raul Garcia-Martin and Raul Sanchez-Reillo. Vein biometric recognition
-on a smartphone. IEEE Access, 8:104801–104813, 2020.
-[10] Jaime Uriarte-Antonio, Daniel Hartung, J Enrique Suarez Pascual, and
+[5] Jaime Uriarte-Antonio, Daniel Hartung, J Enrique Suarez Pascual, and
 Raul Sanchez-Reillo. Vascular biometrics based on a minutiae extraction
 approach. In 2011 Carnahan Conference on Security Technology, pages
 1–7. IEEE, 2011.
-[11] Arfika Nurhudatiana and Adams Wai-Kin Kong. On criminal identification in color skin images using skin marks (rppvsm) and fusion with
+[6] Wojciech Michal Matkowski, Frodo Kin Sun Chan, and Adams Wai Kin
+Kong. A study on wrist identification for forensic investigation. Image
+and Vision Computing, 88:96–112, 2019.
+[7] MR Ramlan, DBL Bong, and TZ Lee. Analysis of thumbprint recognition in different bit levels. In 2012 International Conference on
+Advanced Computer Science Applications and Technologies (ACSAT),
+pages 192–196. IEEE, 2012.
+[8] Chenhao Lin and Ajay Kumar. Matching contactless and contact-based
+conventional fingerprint images for biometrics identification. IEEE
+Transactions on Image Processing, 27(4):2008–2021, 2018.
+[9] Ruggero Donida Labati, Angelo Genovese, Vincenzo Piuri, and Fabio
+Scotti. Contactless fingerprint recognition: A neural approach for
+perspective and rotation effects reduction. In 2013 IEEE Symposium
+on Computational Intelligence in Biometrics and Identity Management
+(CIBIM), pages 22–30, 2013.
+[10] Ruggero Donida Labati, Vincenzo Piuri, and Fabio Scotti. Neural-based
+quality measurement of fingerprint images in contactless biometric systems. In The 2010 International Joint Conference on Neural Networks
+(IJCNN), pages 1–8, 2010.
+[11] Hengyi Zhang, Chaoying Tang, Adams Wai-Kin Kong, and Noah Craft.
+Matching vein patterns from color images for forensic investigation.
+In 2012 IEEE Fifth International Conference on Biometrics: Theory,
+Applications and Systems (BTAS), pages 77–84. IEEE, 2012.
+[12] Goh Kah Ong Michael, Tee Connie, and Andrew Teoh Beng Jin. A
+preliminary acclimatization study of a contactless biometrics using palm
+vein feature. In 2011 6th IEEE Conference on Industrial Electronics and
+Applications, pages 1022–1027. IEEE, 2011.
+[13] Raul Garcia-Martin and Raul Sanchez-Reillo. Vein biometric recognition
+on a smartphone. IEEE Access, 8:104801–104813, 2020.
+[14] Arfika Nurhudatiana and Adams Wai-Kin Kong. On criminal identification in color skin images using skin marks (rppvsm) and fusion with
 inferred vein patterns. IEEE Transactions on Information Forensics and
 Security, 10(5):916–931, 2015.
-[12] Frodo Kin Sun Chan and Adams Wai-Kin Kong. Using hair follicles
+[15] Frodo Kin Sun Chan and Adams Wai-Kin Kong. Using hair follicles
 with leg geometry to align androgenic hair patterns. In 2015 European
 Intelligence and Security Informatics Conference, pages 137–140. IEEE,
 2015.
-[13] Ahmad Hassanat, Mahmoud B Alhasanat, Mohammad Ali Abbadi,
-Eman Btoush, Mouhammd Al-Awadi, and Ahmad S Tarawneh. Victory sign biometric for terrorists identification. arXiv preprint
+[16] Ahmad Hassanat, Mahmoud B Alhasanat, Mohammad Ali Abbadi,
+Eman Btoush, Mouhammd Al-Awadi, and Ahmad S Tarawneh. Victory sign biometric for terrorists identification. arXiv preprint
 arXiv:1602.08325, 2016.
-[14] Michał Choras and Rafał Kozik. Contactless palmprint and knuckle ´
+[17] Michał Choras and Rafał Kozik. Contactless palmprint and knuckle ´
 biometrics for mobile devices. Pattern Analysis and Applications,
 15(1):73–85, 2012.
-[15] Xiangqian Wu, Qiushi Zhao, and Wei Bu. A sift-based contactless
+[18] Zhenan Sun, Tieniu Tan, Yunhong Wang, and Stan Z Li. Ordinal
+palmprint represention for personal identification [represention read
+representation]. In 2005 IEEE computer society conference on computer
+vision and pattern recognition (CVPR’05), volume 1, pages 279–284.
+IEEE, 2005.
+[19] Xiangqian Wu, Qiushi Zhao, and Wei Bu. A sift-based contactless
 palmprint verification approach using iterative ransac and local palmprint
 descriptors. Pattern recognition, 47(10):3314–3326, 2014.
-[16] Wenxiong Kang and Qiuxia Wu. Contactless palm vein recognition
+[20] Wenxiong Kang and Qiuxia Wu. Contactless palm vein recognition
 using a mutual foreground-based local binary pattern. IEEE transactions
 on Information Forensics and Security, 9(11):1974–1985, 2014.
-[17] Lunke Fei, Guangming Lu, Wei Jia, Shaohua Teng, and David Zhang.
+[21] Lunke Fei, Guangming Lu, Wei Jia, Shaohua Teng, and David Zhang.
 Feature extraction methods for palmprint recognition: A survey and
 evaluation. IEEE Transactions on Systems, Man, and Cybernetics:
 Systems, 49(2):346–363, 2018.
-[18] Raul Garcia-Martin and Raul Sanchez-Reillo. Wrist vascular biometric
+[22] Damon L Woodard and Patrick J Flynn. Personal identification utilizing
+finger surface features. In 2005 IEEE Computer Society Conference on
+Computer Vision and Pattern Recognition (CVPR’05), volume 2, pages
+1030–1036. IEEE, 2005.
+[23] Lin Zhang, Lei Zhang, David Zhang, and Hailong Zhu. Online
+finger-knuckle-print verification for personal authentication. Pattern
+recognition, 43(7):2560–2571, 2010.
+[24] Raul Garcia-Martin and Raul Sanchez-Reillo. Wrist vascular biometric
 recognition using a portable contactless system. Sensors, 20(5):1469,
 2020.
-[19] Kandala Kalyana Srinivas, U. Vijitha, G. Amruth Chandra, K. Shiva
-Kumar, Anudeep Peddi, and Bhargava Sai Uppala. Artificial intelligence
-based optimal biometric security system using palm veins. In 2022
-International Mobile and Embedded Technology Conference (MECON),
-pages 287–291, 2022.
-[20] Kennedy Chinedu Okafor and Omowunmi Mary Longe. Computational
-wrist-print biometric identification system using discrete cosine transform. In International Conference on Computational Science and Its
+[25] Kennedy Chinedu Okafor and Omowunmi Mary Longe. Computational
+wrist-print biometric identification system using discrete cosine transform. In International Conference on Computational Science and Its
 Applications, pages 460–475. Springer, 2021.
-[21] Ritwik Duggal, Aarya Pandya, and Nitin Gupta. Deep learning based
-contactless biometric recognition using bracelet lines. In 2023 IEEE 8th
-International Conference for Convergence in Technology (I2CT), pages
-1–9, 2023.
-[22] J Enrique Suarez Pascual, Jaime Uriarte-Antonio, Raul Sanchez-Reillo,
-and Michael G Lorenz. Capturing hand or wrist vein images for biometric authentication using low-cost devices. In 2010 Sixth International
+[26] J Enrique Suarez Pascual, Jaime Uriarte-Antonio, Raul Sanchez-Reillo,
+and Michael G Lorenz. Capturing hand or wrist vein images for biometric authentication using low-cost devices. In 2010 Sixth International
 Conference on Intelligent Information Hiding and Multimedia Signal
 Processing, pages 318–322. IEEE, 2010.
-[23] Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi. You
+[27] Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi. You
 only look once: Unified, real-time object detection. In Proceedings of
 the IEEE conference on computer vision and pattern recognition, pages
 779–788, 2016.
-[24] Sheldon Mascarenhas and Mukul Agarwal. A comparison between
-vgg16, vgg19 and resnet50 architecture frameworks for image classification. In 2021 International Conference on Disruptive Technologies for
-Multi-Disciplinary Research and Applications (CENTCON), volume 1,
-pages 96–99. IEEE, 2021.
